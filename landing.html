@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiuu! — Todo lo que está pasando en tu equipo, en un solo lugar</title>
+<meta name="description" content="Fiuu! transforma conversaciones desordenadas en trabajo organizado. Órdenes de trabajo con responsables, estados e historial. Para cualquier equipo, cualquier rubro.">
+<meta property="og:title" content="Fiuu! — Transformamos conversaciones desordenadas en trabajo organizado">
+<meta property="og:description" content="Plataforma universal de gestión operativa. Convertí mensajes, audios y fotos dispersas en órdenes de trabajo claras.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23000'/%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dy='.35em' font-family='Inter,sans-serif' font-size='13' font-weight='700' fill='%23fff'%3EF!%3C/text%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --black:#000;
+  --white:#fff;
+  --gray-50:#FAFAFA;
+  --gray-100:#F5F5F7;
+  --gray-200:#E8E8ED;
+  --gray-300:#D2D2D7;
+  --gray-400:#86868B;
+  --gray-500:#6E6E73;
+  --gray-600:#424245;
+  --gray-700:#1D1D1F;
+  --accent:#0071E3;
+  --accent-hover:#0077ED;
+  --success:#34C759;
+  --warning:#FF9500;
+  --danger:#FF3B30;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+}
+
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--white);color:var(--gray-700);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+
+/* ═══ TIPOGRAFÍA ═══ */
+.t-eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);}
+.t-display{font-size:clamp(28px,5vw,56px);font-weight:800;letter-spacing:-.035em;line-height:1.12;color:var(--gray-700);}
+.t-headline{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-.03em;line-height:1.08;color:var(--gray-700);}
+.t-title{font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-.02em;line-height:1.15;color:var(--gray-700);}
+.t-body{font-size:17px;font-weight:400;line-height:1.65;color:var(--gray-500);}
+.t-body-lg{font-size:19px;font-weight:400;line-height:1.6;color:var(--gray-500);}
+.t-caption{font-size:14px;font-weight:500;color:var(--gray-400);}
+.t-accent{color:var(--accent);}
+.t-muted{color:var(--gray-400);}
+.t-center{text-align:center;}
+
+/* ═══ LAYOUT ═══ */
+section{padding:140px 24px;}
+.inner{max-width:980px;margin:0 auto;}
+.inner-narrow{max-width:720px;margin:0 auto;}
+.spacer-xs{height:12px;}
+.spacer-sm{height:24px;}
+.spacer-md{height:48px;}
+.spacer-lg{height:80px;}
+
+/* ═══ REVEAL ═══ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94);}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-d1{transition-delay:.1s;}
+.reveal-d2{transition-delay:.2s;}
+.reveal-d3{transition-delay:.3s;}
+.reveal-d4{transition-delay:.4s;}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:52px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);}
+.nav-logo{text-decoration:none;font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--gray-700);}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
+.nav-links a{font-size:13px;font-weight:500;color:var(--gray-500);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gray-700);}
+.nav-cta{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.7;}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;}
+.nav-hamburger span{width:20px;height:1.5px;background:var(--gray-700);display:block;transition:all .3s;}
+.nav-mobile{display:none;position:fixed;top:52px;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);padding:20px 24px;border-bottom:1px solid rgba(0,0,0,.06);z-index:99;}
+.nav-mobile.active{display:block;}
+.nav-mobile a{display:block;padding:14px 0;font-size:15px;font-weight:500;color:var(--gray-700);text-decoration:none;border-bottom:1px solid var(--gray-200);}
+
+/* ═══ BOTONES ═══ */
+.btn-primary{background:var(--accent);color:#fff;font-family:var(--font);font-size:15px;font-weight:600;padding:12px 28px;border-radius:980px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;border:none;cursor:pointer;}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);}
+.btn-secondary{background:transparent;color:var(--accent);font-family:var(--font);font-size:15px;font-weight:600;padding:12px 28px;border-radius:980px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;border:none;cursor:pointer;}
+.btn-secondary:hover{opacity:.7;}
+
+/* ═══ HERO ═══ */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;}
+.hero-sub{max-width:560px;margin:0 auto;}
+.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;}
+.hero h1{max-width:780px;}
+.hero-line1{display:block;}
+.hero-line2-wrap{display:inline-flex;align-items:center;justify-content:center;min-height:1.2em;text-align:center;position:relative;max-width:100%;}
+#hero-line2{color:var(--accent);transition:opacity 1.2s ease;opacity:1;}
+#hero-line2.fade-out{opacity:0;}
+.type-cursor{display:inline-block;width:3px;height:.85em;background:var(--accent);margin-left:4px;vertical-align:middle;border-radius:2px;animation:cursorBlink .8s infinite;transition:opacity .6s ease;}
+.type-cursor.fade-out{opacity:0!important;}
+@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-strip{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:10px;max-width:740px;}
+.hero-flow-pills{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:4px 0 8px;}
+.hero-flow-pill{background:var(--white);border:1px solid var(--gray-200);padding:6px 14px;border-radius:980px;font-size:13px;font-weight:600;color:var(--gray-700);box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.hero-flow-arrow{color:var(--accent);font-weight:700;font-size:13px;}
+.strip-roles{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;}
+.strip-pill{font-size:12px;font-weight:500;color:var(--gray-500);background:var(--gray-100);padding:6px 14px;border-radius:980px;border:1px solid var(--gray-200);}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);animation:heroScroll 2.5s ease-in-out infinite;}
+@keyframes heroScroll{0%,100%{transform:translateX(-50%) translateY(0);opacity:.3;}50%{transform:translateX(-50%) translateY(6px);opacity:.7;}}
+
+/* ═══ IDENTIFICACIÓN ═══ */
+.identificacion{background:var(--gray-50);}
+.dolor-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:860px;margin:0 auto;}
+.dolor-card{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:32px 28px;text-align:left;transition:box-shadow .3s,transform .3s;}
+.dolor-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.06);transform:translateY(-2px);}
+.dolor-quote{font-size:18px;font-weight:700;color:var(--gray-700);margin-bottom:12px;letter-spacing:-.02em;line-height:1.3;}
+.dolor-card p{font-size:14px;color:var(--gray-500);line-height:1.65;}
+.dolor-icon{width:36px;height:36px;border-radius:10px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.dolor-icon svg{width:18px;height:18px;color:var(--gray-400);stroke-width:1.8px;}
+.dolor-cierre{text-align:center;margin-top:64px;}
+.dolor-cierre p{font-size:18px;font-weight:600;color:var(--gray-700);line-height:1.5;}
+.dolor-cierre em{font-style:normal;color:var(--gray-400);}
+
+/* ═══ REENCUADRE ═══ */
+.reencuadre{background:var(--white);text-align:center;}
+.reencuadre-highlight{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:24px;padding:48px 40px;max-width:720px;margin:0 auto;}
+.reencuadre-quote{font-size:24px;font-weight:700;color:var(--gray-700);line-height:1.3;margin-bottom:28px;letter-spacing:-.03em;}
+.reencuadre-attrs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.reencuadre-attr{background:var(--white);border:1px solid var(--gray-200);padding:7px 16px;border-radius:980px;font-size:13px;font-weight:500;color:var(--gray-600);}
+
+/* ═══ TRANSFORMACIÓN ═══ */
+.transformacion{background:var(--gray-50);}
+.trans-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px;margin:0 auto;position:relative;}
+.trans-grid::before{content:'→';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:20px;color:var(--gray-300);background:var(--gray-50);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray-200);z-index:2;font-weight:600;}
+.trans-col{border-radius:20px;padding:36px 32px;}
+.trans-antes{background:var(--white);border:1px solid var(--gray-200);}
+.trans-despues{background:var(--gray-700);border:1px solid var(--gray-700);}
+.trans-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:8px;}
+.trans-antes .trans-label{color:var(--gray-400);}
+.trans-despues .trans-label{color:var(--gray-300);}
+.trans-list{list-style:none;display:flex;flex-direction:column;gap:16px;}
+.trans-antes .trans-list li{font-size:15px;color:var(--gray-400);font-weight:500;font-style:italic;line-height:1.5;}
+.trans-despues .trans-list li{font-size:15px;color:var(--white);font-weight:600;display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.trans-despues .trans-list li svg{flex-shrink:0;margin-top:3px;color:var(--success);}
+.trans-cierre{text-align:center;margin-top:56px;}
+
+/* ═══ CÓMO FUNCIONA ═══ */
+.como-funciona{background:var(--white);}
+.timeline{max-width:680px;margin:0 auto;position:relative;padding-left:28px;}
+.timeline::before{content:'';position:absolute;left:31px;top:24px;bottom:24px;width:1px;background:var(--gray-200);}
+.timeline-item{position:relative;padding-left:56px;padding-bottom:48px;}
+.timeline-item:last-child{padding-bottom:0;}
+.timeline-node{position:absolute;left:0;top:4px;width:40px;height:40px;border-radius:12px;background:var(--gray-50);border:1px solid var(--gray-200);display:flex;align-items:center;justify-content:center;z-index:2;transition:all .3s;}
+.timeline-item:hover .timeline-node{background:var(--gray-700);border-color:var(--gray-700);}
+.timeline-item:hover .timeline-node svg{color:var(--white)!important;}
+.timeline-node svg{width:18px;height:18px;color:var(--gray-500);transition:color .3s;}
+.timeline-step{font-size:11px;font-weight:700;color:var(--gray-400);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.timeline-title{font-size:20px;font-weight:700;color:var(--gray-700);margin-bottom:8px;letter-spacing:-.02em;}
+.timeline-text{font-size:15px;color:var(--gray-500);line-height:1.7;max-width:520px;}
+.timeline-text strong{color:var(--gray-700);font-weight:600;}
+.timeline-modes{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:20px;padding:20px;margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.tmode{background:var(--white);border:1px solid var(--gray-200);border-radius:16px;padding:22px 18px;text-align:left;transition:box-shadow .3s,transform .3s;}
+.tmode:hover{box-shadow:0 6px 20px rgba(0,0,0,.04);transform:translateY(-2px);}
+.tmode-icon{width:36px;height:36px;border-radius:10px;background:var(--gray-100);border:1px solid var(--gray-200);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.tmode-icon svg{width:18px;height:18px;color:var(--gray-500);stroke-width:1.8px;}
+.tmode-title{font-size:15px;font-weight:700;color:var(--gray-700);margin-bottom:6px;letter-spacing:-.01em;font-family:var(--font);}
+.tmode-text{font-size:13px;color:var(--gray-500);line-height:1.6;font-family:var(--font);}
+.tmode-text strong{color:var(--gray-700);font-weight:600;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ DIFERENCIADORES ═══ */
+.dif-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:860px;margin:0 auto;}
+.dif-item{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:20px;padding:28px 24px;text-align:left;}
+.dif-icon{width:36px;height:36px;border-radius:10px;background:var(--white);display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px solid var(--gray-200);}
+.dif-icon svg{color:var(--gray-500);}
+.dif-title{font-size:16px;font-weight:700;color:var(--gray-700);margin-bottom:6px;letter-spacing:-.01em;}
+.dif-desc{font-size:14px;color:var(--gray-500);line-height:1.65;}
+
+/* ═══ PARA QUIÉN — EJEMPLOS ═══ */
+.ejemplos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;margin:0 auto;}
+.ejemplo-card{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:28px 24px;text-align:left;transition:box-shadow .3s,transform .3s;}
+.ejemplo-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.06);transform:translateY(-2px);}
+.ejemplo-title{font-size:16px;font-weight:700;color:var(--gray-700);margin-bottom:8px;letter-spacing:-.01em;}
+.ejemplo-text{font-size:14px;color:var(--gray-500);line-height:1.65;}
+.rubros-strip{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+
+/* ═══ PANEL ROLES ═══ */
+.panel-roles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px;margin:0 auto;}
+.panel-role{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px 20px;text-align:left;}
+.panel-role-title{font-size:14px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:6px;font-family:var(--font);}
+.panel-role-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;font-family:var(--font);}
+
+/* ═══ CTA FINAL ═══ */
+.cta-checks{list-style:none;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:14px;text-align:left;}
+.cta-checks li{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:rgba(255,255,255,.7);line-height:1.5;font-family:var(--font);}
+.cta-checks li svg{flex-shrink:0;margin-top:3px;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.btn-cta-primary{background:var(--accent);color:#fff;font-family:var(--font);font-size:15px;font-weight:600;padding:14px 28px;border-radius:980px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s;border:none;cursor:pointer;}
+.btn-cta-primary:hover{background:var(--accent-hover);transform:translateY(-1px);}
+.btn-cta-secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-family:var(--font);font-size:15px;font-weight:600;padding:14px 28px;border-radius:980px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s;cursor:pointer;}
+.btn-cta-secondary:hover{border-color:rgba(255,255,255,.4);color:#fff;}
+
+/* ═══ STICKY CTA MOBILE ═══ */
+.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(0,0,0,.06);z-index:99;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  section{padding:100px 24px;}
+  .t-display{font-size:clamp(24px,6.5vw,36px);line-height:1.15;}
+  .hero{padding:100px 20px 60px;}
+  .dolor-cards{grid-template-columns:1fr;}
+  .trans-grid{grid-template-columns:1fr;gap:0;}
+  .trans-grid::before{display:none;}
+  .dif-grid{grid-template-columns:1fr;}
+  .ejemplos-grid{grid-template-columns:1fr;}
+  .timeline-modes{grid-template-columns:1fr;}
+  .panel-roles{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .nav-hamburger{display:flex;}
+  nav{padding:0 24px;}
+  .sticky-cta{display:block;}
+  .cta-actions{flex-direction:column;}
+  .cta-actions a{width:100%;justify-content:center;}
+}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:#1D1D1F;
+  padding:60px 48px 40px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:28px;
+  text-align:center;
+}
+.footer-brand{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.footer-logo{
+  font-size:28px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-.03em;
+  font-family:var(--font);
+}
+.footer-logo span{color:var(--accent);}
+.footer-by{
+  font-size:13px;
+  color:rgba(255,255,255,.45);
+  font-family:var(--font);
+}
+.footer-by strong{color:rgba(255,255,255,.7);font-weight:600;}
+.footer-links{
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px 24px;
+  padding:0;
+  margin:0;
+}
+.footer-links li a{
+  font-size:13px;
+  font-weight:500;
+  color:rgba(255,255,255,.5);
+  text-decoration:none;
+  transition:color .2s;
+  font-family:var(--font);
+}
+.footer-links li a:hover{color:#fff;}
+.footer-copy{
+  font-size:12px;
+  color:rgba(255,255,255,.25);
+  font-family:var(--font);
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+  width:100%;
+  max-width:400px;
+  text-align:center;
+}
+@media(max-width:640px){
+  footer{padding:48px 24px 100px;}
+  .footer-links{gap:6px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="#" class="nav-logo">Fiuu<span>!</span></a>
+  <ul class="nav-links">
+    <li><a href="#identificacion">El problema</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#el-panel">El panel</a></li>
+    <li><a href="#para-quien">Para quién</a></li>
+    <li><a href="#contacto" class="nav-cta">Ver demo →</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="document.getElementById('nav-mobile').classList.toggle('active')" aria-label="Menú"><span></span><span></span><span></span></button>
+</nav>
+<div id="nav-mobile" class="nav-mobile">
+  <a href="#identificacion" onclick="this.parentElement.classList.remove('active')">El problema</a>
+  <a href="#como-funciona" onclick="this.parentElement.classList.remove('active')">Cómo funciona</a>
+  <a href="#el-panel" onclick="this.parentElement.classList.remove('active')">El panel</a>
+  <a href="#para-quien" onclick="this.parentElement.classList.remove('active')">Para quién</a>
+  <a href="#contacto" onclick="this.parentElement.classList.remove('active')">Contacto</a>
+</div>
+
+<main>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <p class="t-eyebrow" style="margin-bottom:24px;animation:fadeUp .5s ease both;">Gestión operativa simplificada</p>
+  <h1 class="t-display" style="animation:fadeUp .5s .08s ease both;">
+    <span class="hero-line1">Todo lo que está pasando en tu equipo.</span>
+    <span class="hero-line2-wrap"><span id="hero-line2"></span><span class="type-cursor" id="type-cursor"></span></span>
+  </h1>
+  <div class="spacer-md"></div>
+  <p class="t-body-lg hero-sub" style="animation:fadeUp .5s .16s ease both;">Mensajes, audios, fotos y archivos se acumulan. La información existe, pero está dispersa. <strong style="color:var(--gray-700);">Fiuu!</strong> la convierte en órdenes de trabajo claras, con responsables, estados e historial.</p>
+  <div class="spacer-md"></div>
+  <div class="hero-actions" style="animation:fadeUp .5s .24s ease both;">
+    <a href="#como-funciona" class="btn-primary">Ver cómo funciona <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a href="#contacto" class="btn-secondary">Consultar una demostración</a>
+  </div>
+  <div class="hero-strip" style="animation:fadeUp .5s .32s ease both;">
+    <p class="t-caption" style="font-weight:600;">Una misma estructura para cualquier operación:</p>
+    <div class="hero-flow-pills">
+      <span class="hero-flow-pill">Tu equipo</span>
+      <span class="hero-flow-arrow">→</span>
+      <span class="hero-flow-pill">Tus clientes</span>
+      <span class="hero-flow-arrow">→</span>
+      <span class="hero-flow-pill">Tus lugares</span>
+      <span class="hero-flow-arrow">→</span>
+      <span class="hero-flow-pill">Tus tareas</span>
+    </div>
+    <div class="strip-roles">
+      <span class="strip-pill">Estudios y profesionales</span>
+      <span class="strip-pill">Services</span>
+      <span class="strip-pill">Colegios</span>
+      <span class="strip-pill">Clubs</span>
+      <span class="strip-pill">Inmobiliarias</span>
+      <span class="strip-pill">Consorcios</span>
+      <span class="strip-pill">Empresas</span>
+    </div>
+  </div>
+  <div class="hero-scroll"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gray-300)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+</section>
+
+<!-- ═══ IDENTIFICACIÓN ═══ -->
+<section class="identificacion" id="identificacion">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">¿Te resulta familiar?</p>
+    <h2 class="t-headline t-center reveal" style="max-width:680px;margin:0 auto;">La dificultad no es hacer el trabajo. Es saber qué está pasando.</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body t-center reveal" style="max-width:480px;margin:0 auto;">Durante un día normal, estas preguntas se repiten una y otra vez.</p>
+    <div class="spacer-lg"></div>
+    <div class="dolor-cards">
+      <div class="dolor-card reveal">
+        <div class="dolor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h4 class="dolor-quote">"¿Quién estaba viendo esto?"</h4>
+        <p>Mensajes, audios y conversaciones se acumulan en WhatsApp. La información existe, pero está repartida entre demasiados lugares y personas.</p>
+      </div>
+      <div class="dolor-card reveal reveal-d1">
+        <div class="dolor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h4 class="dolor-quote">"¿Esto ya se solucionó?"</h4>
+        <p>No hay forma rápida de saber si un problema fue resuelto o sigue pendiente. Cada consulta requiere perseguir a alguien para obtener una respuesta.</p>
+      </div>
+      <div class="dolor-card reveal reveal-d2">
+        <div class="dolor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <h4 class="dolor-quote">"¿Me reenviás la foto?"</h4>
+        <p>Fotografías, archivos y documentos se pierden en el flujo de conversaciones. Encontrar la evidencia de algo que pasó la semana pasada es una tarea en sí misma.</p>
+      </div>
+      <div class="dolor-card reveal reveal-d3">
+        <div class="dolor-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h4 class="dolor-quote">"Pensé que lo estaba haciendo otra persona."</h4>
+        <p>Cuando muchas personas coordinan muchas cosas, la responsabilidad se diluye. Lo que no está asignado explícitamente, queda en el aire.</p>
+      </div>
+    </div>
+    <div class="dolor-cierre reveal">
+      <p>Y eso convierte la coordinación en <em>un trabajo adicional que nadie planificó.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REENCUADRE ═══ -->
+<section class="reencuadre">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">El verdadero problema</p>
+    <h2 class="t-headline t-center reveal" style="max-width:720px;margin:0 auto;">No es la cantidad de mensajes. Es no poder convertirlos en información de trabajo.</h2>
+    <div class="spacer-lg"></div>
+    <div class="reencuadre-highlight reveal">
+      <p class="reencuadre-quote">"Un mensaje comunica algo.<br>Una orden de trabajo necesita mucho más."</p>
+      <div class="reencuadre-attrs">
+        <span class="reencuadre-attr">Qué ocurrió</span>
+        <span class="reencuadre-attr">Dónde</span>
+        <span class="reencuadre-attr">Cuándo</span>
+        <span class="reencuadre-attr">Qué prioridad</span>
+        <span class="reencuadre-attr">Quién se ocupa</span>
+        <span class="reencuadre-attr">En qué estado</span>
+        <span class="reencuadre-attr">Qué se hizo</span>
+        <span class="reencuadre-attr">Qué falta</span>
+        <span class="reencuadre-attr">Cómo terminó</span>
+      </div>
+    </div>
+    <div class="spacer-md"></div>
+    <p class="t-body t-center reveal" style="max-width:540px;margin:0 auto;"><strong style="color:var(--gray-700);">Fiuu!</strong> toma ese flujo cotidiano y lo convierte en una estructura que podés consultar en segundos.</p>
+  </div>
+</section>
+
+<!-- ═══ TRANSFORMACIÓN ═══ -->
+<section class="transformacion">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">La diferencia</p>
+    <h2 class="t-headline t-center reveal">De "me avisaron" a "está registrado".</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body t-center reveal" style="max-width:520px;margin:0 auto;">No se trata de trabajar más. Se trata de que el trabajo deje un registro útil mientras ocurre.</p>
+    <div class="spacer-lg"></div>
+    <div class="trans-grid">
+      <div class="trans-col trans-antes reveal">
+        <div class="trans-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Antes
+        </div>
+        <ul class="trans-list">
+          <li>"Me mandaron un audio."</li>
+          <li>"Me dijeron que lo estaban viendo."</li>
+          <li>"Creo que habían enviado una foto."</li>
+          <li>"Después me fijo."</li>
+          <li>"Preguntale a alguien más."</li>
+        </ul>
+      </div>
+      <div class="trans-col trans-despues reveal reveal-d1">
+        <div class="trans-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Con Fiuu!
+        </div>
+        <ul class="trans-list">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Orden registrada</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Responsable asignado</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Estado visible</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Evidencia adjunta</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Historial disponible</li>
+        </ul>
+      </div>
+    </div>
+    <div class="trans-cierre reveal">
+      <p class="t-body" style="max-width:580px;margin:0 auto;">La información deja de estar escondida dentro de conversaciones. <strong style="color:var(--gray-700);">Pasa a estar organizada alrededor del trabajo.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CÓMO FUNCIONA ═══ -->
+<section class="como-funciona" id="como-funciona">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">Así de simple</p>
+    <h2 class="t-headline t-center reveal">Cinco pasos. Cero complejidad.</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body t-center reveal" style="max-width:480px;margin:0 auto;">No hace falta aprender una metodología nueva. La tecnología se adapta a lo que ya hacés.</p>
+    <div class="spacer-lg"></div>
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="timeline-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></div>
+        <div class="timeline-step">Paso 1</div>
+        <h3 class="timeline-title">Llega a tu bandeja de entrada</h3>
+        <p class="timeline-text">Un audio de WhatsApp, un llamado, un QR escaneado, un mail. <strong>Todo llega a un solo lugar.</strong> Ya no tenés que buscar en cinco apps distintas.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+        <div class="timeline-step">Paso 2</div>
+        <h3 class="timeline-title">Creás la orden de trabajo</h3>
+        <p class="timeline-text">Tres formas simples según cómo llegue la solicitud:</p>
+        <div class="timeline-modes">
+          <div class="tmode">
+            <div class="tmode-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h4 class="tmode-title">Carga express</h4>
+            <p class="tmode-text">Lo que tardás en mandar un audio: <strong>10 segundos.</strong> Solo cliente, tarea y responsable.</p>
+          </div>
+          <div class="tmode">
+            <div class="tmode-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h4 class="tmode-title">Por lugar o cliente</h4>
+            <p class="tmode-text">Seleccionás el lugar o cliente. <strong>El historial anterior aparece solo.</strong></p>
+          </div>
+          <div class="tmode">
+            <div class="tmode-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <h4 class="tmode-title">Reporte directo o QR</h4>
+            <p class="tmode-text">Un cliente reporta una falla o escanea un QR. <strong>La orden se crea sola.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="timeline-step">Paso 3</div>
+        <h3 class="timeline-title">Asignás y priorizás</h3>
+        <p class="timeline-text">Elegís quién lo hace y qué urgencia tiene. Cada persona abre una pantalla más simple: <strong>solo su bandeja.</strong> Sin ruido, sin el resto de la operación.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+        <div class="timeline-step">Paso 4</div>
+        <h3 class="timeline-title">El equipo trabaja y actualiza</h3>
+        <p class="timeline-text">Desde el celular: cambian el estado, suben fotos, agregan notas. Misma lógica, menos menús. La orden puede pasar por varias personas <strong>sin duplicarse.</strong></p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="timeline-step">Paso 5</div>
+        <h3 class="timeline-title">Vos ves todo. Y queda registrado.</h3>
+        <p class="timeline-text">Sin llamar. Sin preguntar. <strong>Vos ves todo. Ellos, solo lo asignado.</strong> Y cuando alguien pregunte "¿qué pasó con aquello?", la respuesta está ahí.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ═══ EL PANEL — INTERFAZ INTERACTIVA ═══ -->
+<section class="el-panel" id="el-panel">
+  <div class="inner" style="text-align:center;">
+    <p class="t-eyebrow reveal" style="color:var(--gray-400);margin-bottom:16px;">Una pantalla. Toda la claridad.</p>
+    <h2 class="t-headline reveal" style="color:var(--white);max-width:580px;margin:0 auto;">Abrís Fiuu! y ves qué está pasando.</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body reveal" style="color:var(--gray-400);max-width:480px;margin:0 auto;">Esta es la vista de quien coordina. El equipo ve la misma lógica, con menos menús.</p>
+    <div class="spacer-sm"></div>
+    <p class="reveal" style="font-size:13px;font-weight:600;color:var(--gray-400);display:inline-flex;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Quien coordina ve todo. El equipo ve solo lo suyo.
+    </p>
+    <div class="spacer-lg"></div>
+
+    <!-- DEVICE FRAME -->
+    <div class="device-wrap reveal">
+      <div class="device-frame" id="device-demo">
+        <div class="device-notch"></div>
+        
+        <header class="app-header">
+          <div class="app-header-left">
+            <h1 class="app-title" id="app-view-title">Tu operación</h1>
+            <p class="app-subtitle">Hoy · Todo al día</p>
+          </div>
+          <div class="app-header-right">
+            <button class="app-btn-icon" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+            <button class="app-btn-icon" aria-label="Notificaciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+          </div>
+        </header>
+
+        <main class="app-scroll" id="app-scroll">
+
+          <!-- VISTA INICIO -->
+          <div class="app-view active" id="appview-inicio">
+            <section class="app-card animate-in">
+              <div class="app-card-header">
+                <div class="app-card-title"><span class="app-card-icon" style="color:#FF9500;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>Órdenes</div>
+                <button class="app-card-link" onclick="appNav('ordenes')">Ver todas →</button>
+              </div>
+              <div class="app-stats-grid">
+                <div class="app-stat"><span class="app-stat-dot" style="background:#FF3B30;"></span><span class="app-stat-val">2</span><span class="app-stat-lbl">Urgentes</span></div>
+                <div class="app-stat"><span class="app-stat-dot" style="background:#FF9500;"></span><span class="app-stat-val">4</span><span class="app-stat-lbl">Pendientes</span></div>
+                <div class="app-stat"><span class="app-stat-dot" style="background:#007AFF;"></span><span class="app-stat-val">3</span><span class="app-stat-lbl">En proceso</span></div>
+                <div class="app-stat"><span class="app-stat-dot" style="background:#34C759;"></span><span class="app-stat-val">18</span><span class="app-stat-lbl">Finalizadas</span></div>
+              </div>
+            </section>
+            <section class="app-card animate-in" style="animation-delay:.1s;">
+              <div class="app-card-header">
+                <div class="app-card-title"><span class="app-card-icon" style="color:#007AFF;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></span>Bandeja de entrada</div>
+                <button class="app-card-link" onclick="appNav('ordenes')">Ver →</button>
+              </div>
+              <div class="app-task-list">
+                <div class="app-task"><span class="app-task-dot" style="background:#FF3B30;"></span><div class="app-task-info"><div class="app-task-name">Intervención — Cliente B</div><div class="app-task-meta">OT-112 · Urgente · Vence hoy</div></div></div>
+                <div class="app-task"><span class="app-task-dot" style="background:#007AFF;"></span><div class="app-task-info"><div class="app-task-name">Revisión de equipo</div><div class="app-task-meta">OT-113 · Sector 2 · En proceso</div></div></div>
+                <div class="app-task"><span class="app-task-dot" style="background:#FF9500;"></span><div class="app-task-info"><div class="app-task-name">Coordinar visita — Cliente B</div><div class="app-task-meta">OT-114 · Encargada · Mañana</div></div></div>
+              </div>
+            </section>
+            <section class="app-card animate-in" style="animation-delay:.2s;">
+              <div class="app-card-header">
+                <div class="app-card-title"><span class="app-card-icon" style="color:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Equipo</div>
+                <button class="app-card-link" onclick="appNav('equipo')">Ver equipo →</button>
+              </div>
+              <p style="font-size:13px;font-weight:600;color:#000;font-family:var(--font);">6 personas activas</p>
+            </section>
+            <section class="app-card animate-in" style="animation-delay:.3s;">
+              <div class="app-card-header">
+                <div class="app-card-title"><span class="app-card-icon" style="color:#FF3B30;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>Alertas</div>
+              </div>
+              <div class="app-alerts">
+                <span class="app-alert-chip"><span class="app-alert-dot" style="background:#FF3B30;"></span>1 vencida</span>
+                <span class="app-alert-chip"><span class="app-alert-dot" style="background:#FF9500;"></span>2 por vencer</span>
+                <span class="app-alert-chip"><span class="app-alert-dot" style="background:#007AFF;"></span>1 proveedor</span>
+              </div>
+            </section>
+          </div>
+
+          <!-- VISTA ÓRDENES -->
+          <div class="app-view" id="appview-ordenes">
+            <div class="app-filter-pills">
+              <button class="app-filter-pill active" onclick="appFilterOrders('todas', this)">Todas (5)</button>
+              <button class="app-filter-pill" onclick="appFilterOrders('urgente', this)">Urgentes (2)</button>
+              <button class="app-filter-pill" onclick="appFilterOrders('proceso', this)">En proceso (1)</button>
+              <button class="app-filter-pill" onclick="appFilterOrders('encargada', this)">Encargadas (1)</button>
+            </div>
+            <div class="app-list-item" data-status="urgente"><div class="app-list-icon" style="background:rgba(255,59,48,.1);color:#FF3B30;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="app-list-info"><div class="app-list-title">OT-112 · Intervención Cliente B</div><div class="app-list-sub">Cliente B · Urgente · Vence hoy</div><div class="app-assignee"><span class="app-avatar-dot">LG</span> Laura G.</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item" data-status="proceso"><div class="app-list-icon" style="background:rgba(0,122,255,.1);color:#007AFF;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div class="app-list-info"><div class="app-list-title">OT-113 · Revisión de equipo</div><div class="app-list-sub">Sector 2 · En proceso</div><div class="app-assignee"><span class="app-avatar-dot" style="background:#007AFF;">CM</span> Carlos M.</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item" data-status="encargada"><div class="app-list-icon" style="background:rgba(255,149,0,.1);color:#FF9500;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="app-list-info"><div class="app-list-title">OT-114 · Coordinar visita</div><div class="app-list-sub">Cliente B · Encargada · Mañana</div><div class="app-assignee"><span class="app-avatar-dot" style="background:#FF9500;">AP</span> Ana P.</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item" data-status="finalizada"><div class="app-list-icon" style="background:rgba(52,199,89,.1);color:#34C759;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="app-list-info"><div class="app-list-title">OT-111 · Tarea finalizada</div><div class="app-list-sub">Sede A · Finalizada ayer</div><div class="app-assignee"><span class="app-avatar-dot" style="background:#34C759;">MR</span> Martín R.</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item" data-status="finalizada"><div class="app-list-icon" style="background:rgba(52,199,89,.1);color:#34C759;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="app-list-info"><div class="app-list-title">OT-110 · Retiro de equipo</div><div class="app-list-sub">Sede central · Finalizada</div><div class="app-assignee"><span class="app-avatar-dot" style="background:#34C759;">LG</span> Laura G.</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+
+          <!-- VISTA EQUIPO -->
+          <div class="app-view" id="appview-equipo">
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(88,86,214,.1);color:#5856D6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="app-list-info"><div class="app-list-title">Laura G.</div><div class="app-list-sub">Operaciones · 2 órdenes activas</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(88,86,214,.1);color:#5856D6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="app-list-info"><div class="app-list-title">Carlos M.</div><div class="app-list-sub">Técnico · 1 orden activa</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(88,86,214,.1);color:#5856D6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="app-list-info"><div class="app-list-title">Ana P.</div><div class="app-list-sub">Asistente · 1 orden activa</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(88,86,214,.1);color:#5856D6;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="app-list-info"><div class="app-list-title">Martín R.</div><div class="app-list-sub">Externo · 1 orden</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+
+          <!-- VISTA LUGARES -->
+          <div class="app-view" id="appview-lugares">
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(0,122,255,.1);color:#007AFF;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="app-list-info"><div class="app-list-title">Cliente B</div><div class="app-list-sub">2 órdenes · 1 urgente</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(0,122,255,.1);color:#007AFF;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="app-list-info"><div class="app-list-title">Sector 2</div><div class="app-list-sub">1 orden en proceso</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(0,122,255,.1);color:#007AFF;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="app-list-info"><div class="app-list-title">Sede central</div><div class="app-list-sub">Sin órdenes activas</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="app-list-item"><div class="app-list-icon" style="background:rgba(52,199,89,.1);color:#34C759;"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="app-list-info"><div class="app-list-title">Sede A</div><div class="app-list-sub">Sin órdenes activas</div></div><div class="app-list-chev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+          </div>
+
+        </main>
+
+        <!-- BOTÓN ACCIÓN RÁPIDA (FAB) -->
+        <button class="app-fab" onclick="appNav('ordenes')" aria-label="Nueva Orden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Nueva orden</span>
+        </button>
+
+        <!-- TAB BAR FIJA ABAJO -->
+        <nav class="app-tabbar">
+          <button class="app-tab active" data-view="inicio" onclick="appNav('inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></button>
+          <button class="app-tab" data-view="ordenes" onclick="appNav('ordenes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Órdenes</span></button>
+          <button class="app-tab" data-view="equipo" onclick="appNav('equipo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><span>Equipo</span></button>
+          <button class="app-tab" data-view="lugares" onclick="appNav('lugares')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Lugares</span></button>
+        </nav>
+      </div>
+    </div>
+
+    <div class="spacer-lg"></div>
+
+    <!-- Roles debajo del panel -->
+    <div class="panel-roles">
+      <div class="panel-role reveal"><p class="panel-role-title">Quien ejecuta ve:</p><p class="panel-role-desc">Solo su bandeja. Qué tiene que hacer, dónde, y cómo actualizarlo.</p></div>
+      <div class="panel-role reveal reveal-d1"><p class="panel-role-title">Quien coordina ve:</p><p class="panel-role-desc">Toda la operación. Bandeja, prioridades, responsables, estados.</p></div>
+      <div class="panel-role reveal reveal-d2"><p class="panel-role-title">Quien decide ve:</p><p class="panel-role-desc">Indicadores, trazabilidad, visión global. Sin entrar en cada detalle.</p></div>
+    </div>
+
+    <!-- Control Flexible -->
+    <div class="onboarding-card reveal" style="margin-top:24px;">
+      <span class="onboarding-badge"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Control flexible</span>
+      <h3 class="onboarding-title">Cargás órdenes vos en 10 segundos o dejás que tu equipo y clientes las generen por vos</h3>
+      <p class="onboarding-desc">Si querés crear una orden, la cargás al instante. Si preferís no cargarte de tareas administrativas, las solicitudes nacen solas desde un QR, un cliente o tu asistente. <strong style="color:var(--gray-700);">Vos abrís Fiuu! y tenés la foto completa y el control total.</strong></p>
+    </div>
+
+    <!-- Onboarding Asistido -->
+    <div class="onboarding-card reveal">
+      <span class="onboarding-badge"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Servicio de Onboarding Incluido</span>
+      <h3 class="onboarding-title">Te entregamos Fiuu! listo para usar</h3>
+      <p class="onboarding-desc">Escuchamos cómo opera tu equipo, adaptamos las pantallas a tus términos y te dejamos la cuenta configurada. No tenés que cargar nada solo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DIFERENCIADORES ═══ -->
+<section class="diferenciadores" style="background:var(--white);">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">Lo que nos diferencia</p>
+    <h2 class="t-headline t-center reveal" style="max-width:520px;margin:0 auto;">Simple. Adaptable. Al alcance de tu equipo.</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body t-center reveal" style="max-width:440px;margin:0 auto;">No es otra herramienta más para aprender.</p>
+    <div class="spacer-lg"></div>
+    <div class="dif-grid">
+      <div class="dif-item reveal">
+        <div class="dif-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h4 class="dif-title">No es otro chat</h4>
+        <p class="dif-desc">WhatsApp sigue siendo WhatsApp. La diferencia está en dónde queda registrada la información.</p>
+      </div>
+      <div class="dif-item reveal reveal-d1">
+        <div class="dif-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+        <h4 class="dif-title">No es otra planilla</h4>
+        <p class="dif-desc">Las relaciones entre órdenes, personas y estados ocurren automáticamente.</p>
+      </div>
+      <div class="dif-item reveal reveal-d2">
+        <div class="dif-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <h4 class="dif-title">Reporte con QR</h4>
+        <p class="dif-desc">Escaneás un QR y reportás desde el teléfono. Sin instalar apps.</p>
+      </div>
+      <div class="dif-item reveal reveal-d3">
+        <div class="dif-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <h4 class="dif-title">Orden en 30 segundos</h4>
+        <p class="dif-desc">Cliente + descripción + responsable. No necesitás cargar toda tu operación para empezar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PARA QUIÉN ═══ -->
+<section class="para-quien" id="para-quien" style="background:var(--gray-50);">
+  <div class="inner">
+    <p class="t-eyebrow t-center reveal" style="margin-bottom:16px;">Para quien tiene que saber qué está pasando</p>
+    <h2 class="t-headline t-center reveal">No importa el cargo. Importa la responsabilidad.</h2>
+    <div class="spacer-sm"></div>
+    <p class="t-body t-center reveal" style="max-width:480px;margin:0 auto;">Lo que une a nuestros clientes es la necesidad de tener claridad.</p>
+    <div class="spacer-lg"></div>
+    <div class="ejemplos-grid">
+      <div class="ejemplo-card reveal">
+        <h4 class="ejemplo-title">Quien coordina</h4>
+        <p class="ejemplo-text">Tu asistente recibe un pedido, crea la orden, la asigna, y vos ves el avance sin preguntar a nadie.</p>
+      </div>
+      <div class="ejemplo-card reveal reveal-d1">
+        <h4 class="ejemplo-title">Quien ejecuta</h4>
+        <p class="ejemplo-text">Abre una pantalla más simple: su bandeja, pendientes, nueva orden. Actualiza y listo. Sin ver el resto de la operación.</p>
+      </div>
+      <div class="ejemplo-card reveal reveal-d2">
+        <h4 class="ejemplo-title">Quien asiste</h4>
+        <p class="ejemplo-text">El jefe le encarga una visita, un envío o un seguimiento. Ve solo eso, en la misma pantalla simple. Queda registrado, con responsable y fecha.</p>
+      </div>
+    </div>
+    <div class="spacer-md"></div>
+    <div class="rubros-strip reveal">
+      <span class="t-caption" style="font-weight:700;">También funciona en:</span>
+      <span class="strip-pill">Consultoras</span>
+      <span class="strip-pill">Clínicas</span>
+      <span class="strip-pill">Consorcios</span>
+      <span class="strip-pill">Empresas</span>
+      <span class="strip-pill">Y cualquier equipo que coordina trabajo</span>
+    </div>
+    <div class="spacer-sm"></div>
+    <p class="t-center reveal"><a href="#contacto" style="font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;">Consultá una propuesta personalizada →</a></p>
+  </div>
+</section>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section class="cta-final" id="contacto" style="background:var(--gray-700);padding:160px 24px;">
+  <div class="inner" style="text-align:center;">
+    <h2 class="t-headline reveal" style="color:var(--white);max-width:720px;margin:0 auto;">Si hoy tu operación vive entre mensajes, audios, fotos y memoria.</h2>
+    <div class="spacer-md"></div>
+    <p class="reveal" style="font-size:17px;color:rgba(255,255,255,.6);max-width:520px;margin:0 auto;line-height:1.7;">No te obligamos a cambiar de golpe cómo trabajás. Empezamos por ordenar lo que ya hacés.</p>
+    <div class="spacer-lg"></div>
+    <ul class="cta-checks reveal">
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Tenés personas a cargo y necesitás saber qué hace cada una</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Usás WhatsApp como principal medio para coordinar</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Hay órdenes que se pierden o quedan sin seguimiento</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Sentís que gran parte de tu día se va simplemente en coordinar</li>
+    </ul>
+    <div class="spacer-md"></div>
+    <div class="cta-actions reveal">
+      <a href="https://wa.me/5491100000000?text=Hola!%20Vi%20Fiuu%20y%20quiero%20consultar" class="btn-cta-primary" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Consultar una demostración</a>
+      <a href="mailto:contacto@nexent.com" class="btn-cta-secondary"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Analizar mi caso</a>
+    </div>
+    <div class="spacer-lg"></div>
+    <p class="reveal" style="font-size:15px;color:rgba(255,255,255,.35);font-style:italic;max-width:420px;margin:0 auto;line-height:1.6;">"El sistema tiene que trabajar para las personas, no al revés."</p>
+    <p class="reveal" style="font-size:13px;color:rgba(255,255,255,.5);margin-top:16px;font-weight:700;letter-spacing:.04em;">Potencia detrás, simplicidad adelante.</p>
+    <p class="reveal" style="font-size:12px;color:rgba(255,255,255,.2);margin-top:20px;">Sin tecnicismos · Adaptado a tu realidad · Implementación progresiva</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-brand">
+    <span class="footer-logo">Fiuu<span>!</span></span>
+    <span class="footer-by">un producto de <strong>Nexent</strong></span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#identificacion">El problema</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#el-panel">El panel</a></li>
+    <li><a href="#para-quien">Para quién</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <span class="footer-copy">© 2025 Fiuu! · Nexent</span>
+</footer>
+
+<!-- STICKY CTA MOBILE -->
+<div class="sticky-cta">
+  <a href="#contacto" class="btn-primary" style="width:100%;justify-content:center;padding:14px 24px;font-size:14px;">Consultar una demostración →</a>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<style>
+/* Estilos para el Panel Interactivo */
+.el-panel{background:var(--gray-700);padding:140px 24px;}
+.device-wrap{display:flex;justify-content:center;width:100%;padding:0 16px;}
+.device-frame{
+  width:100%;
+  max-width:375px;
+  height:780px;
+  background:#F2F2F7;
+  border-radius:44px;
+  box-shadow:0 0 0 10px #1D1D1F,0 0 0 12px #3a3a3c,0 40px 80px rgba(0,0,0,.45);
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.device-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:130px;height:26px;background:#1D1D1F;border-radius:0 0 18px 18px;z-index:20;}
+.app-header{
+  position:relative;
+  flex-shrink:0;
+  padding:44px 22px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  background:#F2F2F7;
+  z-index:5;
+}
+.app-title{font-size:26px;font-weight:700;letter-spacing:-.03em;color:#000;margin-bottom:2px;font-family:var(--font);line-height:1.1;}
+.app-subtitle{font-size:12px;color:#8E8E93;font-weight:400;font-family:var(--font);}
+.app-header-right{display:flex;gap:8px;}
+.app-btn-icon{width:34px;height:34px;border-radius:50%;background:#fff;border:none;display:flex;align-items:center;justify-content:center;color:#000;box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer;transition:transform .15s;}
+.app-btn-icon:active{transform:scale(.92);}
+.app-btn-icon svg{width:17px;height:17px;stroke-width:2px;}
+.app-scroll{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:0 18px 20px;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.app-scroll::-webkit-scrollbar{width:0;display:none;}
+.app-view{display:none;}
+.app-view.active{display:block;}
+.app-card{background:#fff;border-radius:18px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.app-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.app-card-title{font-size:14px;font-weight:700;color:#000;display:flex;align-items:center;gap:8px;font-family:var(--font);}
+.app-card-icon{display:flex;align-items:center;justify-content:center;width:22px;height:22px;}
+.app-card-icon svg{width:18px;height:18px;}
+.app-card-link{font-size:11px;font-weight:600;color:#007AFF;background:none;border:none;cursor:pointer;font-family:var(--font);padding:0;}
+.app-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.app-stat{display:flex;flex-direction:column;align-items:center;text-align:center;background:#F9F9F9;border-radius:10px;padding:9px 3px;}
+.app-stat-dot{width:6px;height:6px;border-radius:50%;margin-bottom:5px;}
+.app-stat-val{font-size:18px;font-weight:700;color:#000;font-family:var(--font);line-height:1;}
+.app-stat-lbl{font-size:9px;color:#8E8E93;margin-top:3px;font-family:var(--font);}
+.app-task-list{display:flex;flex-direction:column;gap:5px;}
+.app-task{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;background:#F9F9F9;}
+.app-task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.app-task-info{flex:1;min-width:0;}
+.app-task-name{font-size:12px;font-weight:500;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font);}
+.app-task-meta{font-size:10px;color:#8E8E93;font-family:var(--font);margin-top:1px;}
+.app-alerts{display:flex;flex-wrap:wrap;gap:5px;}
+.app-alert-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:980px;background:#F9F9F9;font-size:11px;font-weight:500;color:#000;font-family:var(--font);}
+.app-alert-dot{width:5px;height:5px;border-radius:50%;}
+.app-list-item{display:flex;align-items:center;gap:11px;padding:12px 11px;border-radius:12px;background:#fff;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.app-list-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.app-list-icon svg{width:18px;height:18px;}
+.app-list-info{flex:1;min-width:0;}
+.app-list-title{font-size:13px;font-weight:600;color:#000;font-family:var(--font);line-height:1.3;}
+.app-list-sub{font-size:11px;color:#8E8E93;font-family:var(--font);margin-top:2px;}
+.app-list-chev{color:#C7C7CC;flex-shrink:0;}
+
+/* Floating Action Button (+ Nueva orden) */
+.app-fab{position:absolute;bottom:80px;right:16px;background:var(--accent);color:#fff;border:none;padding:9px 14px;border-radius:980px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;box-shadow:0 4px 14px rgba(0,113,227,.4);z-index:20;cursor:pointer;font-family:var(--font);transition:transform .15s,background .15s;}
+.app-fab:active{transform:scale(.94);}
+.app-fab svg{width:13px;height:13px;stroke-width:2.5px;}
+
+/* Filtros rápidos por estado */
+.app-filter-pills{display:flex;gap:5px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px;scrollbar-width:none;-ms-overflow-style:none;}
+.app-filter-pills::-webkit-scrollbar{display:none;}
+.app-filter-pill{font-size:10px;font-weight:600;padding:4px 10px;border-radius:980px;background:#E5E5EA;color:#636366;border:none;white-space:nowrap;font-family:var(--font);cursor:pointer;transition:all .15s;}
+.app-filter-pill.active{background:var(--accent);color:#fff;}
+
+/* Badge de Responsable Asignado */
+.app-assignee{display:inline-flex;align-items:center;gap:4px;background:#F2F2F7;padding:2px 7px;border-radius:980px;font-size:10px;font-weight:600;color:#424245;margin-top:3px;font-family:var(--font);}
+.app-avatar-dot{width:13px;height:13px;border-radius:50%;background:#5856D6;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+
+/* Card de Onboarding Asistido (Estilo nativo landing) */
+.onboarding-card{background:var(--white);border:1px solid var(--gray-200);border-radius:24px;padding:36px 32px;max-width:860px;margin:48px auto 0;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.03);}
+.onboarding-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gray-100);border:1px solid var(--gray-200);color:var(--accent);font-size:11px;font-weight:700;padding:5px 14px;border-radius:980px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;font-family:var(--font);}
+.onboarding-title{font-size:22px;font-weight:800;color:var(--gray-700);margin-bottom:8px;letter-spacing:-.02em;font-family:var(--font);}
+.onboarding-desc{font-size:15px;color:var(--gray-500);line-height:1.6;max-width:620px;margin:0 auto;font-family:var(--font);}
+.app-tabbar{
+  position:relative;
+  flex-shrink:0;
+  width:100%;
+  height:72px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,.06);
+  display:flex;
+  justify-content:space-around;
+  align-items:flex-start;
+  padding-top:10px;
+  padding-bottom:20px;
+  z-index:15;
+}
+.app-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:#8E8E93;cursor:pointer;flex:1;font-family:var(--font);transition:color .2s;padding:0;}
+.app-tab svg{width:22px;height:22px;transition:transform .2s;}
+.app-tab span{font-size:10px;font-weight:500;}
+.app-tab.active{color:#007AFF;}
+.app-tab.active svg{transform:translateY(-2px);}
+.app-tab:active svg{transform:scale(.92);}
+@keyframes appFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:appFadeIn .5s cubic-bezier(.25,.46,.45,.94) forwards;opacity:0;}
+
+/* Panel Roles (Responsive overrides for device) */
+@media(max-width:768px){
+  .device-frame{max-width:340px;height:700px;border-radius:40px;box-shadow:0 0 0 8px #1D1D1F,0 0 0 10px #3a3a3c,0 30px 60px rgba(0,0,0,.4);}
+  .device-notch{width:110px;height:22px;}
+  .app-header{padding:38px 18px 12px;}
+  .app-title{font-size:23px;}
+  .app-subtitle{font-size:11px;}
+  .app-scroll{padding:0 14px 16px;}
+  .app-tabbar{height:66px;padding-bottom:16px;}
+  .app-tab svg{width:20px;height:20px;}
+  .app-tab span{font-size:9px;}
+}
+@media(max-width:480px){
+  .device-frame{max-width:calc(100vw - 40px);height:680px;border-radius:36px;}
+  .device-notch{width:100px;height:20px;}
+  .app-header{padding:34px 16px 10px;}
+  .app-title{font-size:21px;}
+  .app-scroll{padding:0 14px 16px;}
+}
+@media(max-width:360px){
+  .device-frame{height:640px;}
+  .app-stat-val{font-size:16px;}
+  .app-stat-lbl{font-size:8px;}
+}
+</style>
+<script>
+// Scroll reveal
+const revealEls=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el=>io.observe(el));
+
+// Typewriter
+(function(){
+const phrases=["En un solo lugar.","Sin perseguir información.","Sin depender de la memoria.","Organizado de verdad."];
+let i=0,j=0,del=false;
+const el=document.getElementById('hero-line2');
+const cursor=document.getElementById('type-cursor');
+function type(){
+  if(!el)return;
+  const c=phrases[i];
+  el.textContent=del?c.substring(0,j--):c.substring(0,j++);
+  if(!del&&j===c.length+1){
+    // Al llegar a la última frase "Organizado de verdad."
+    if(i===phrases.length-1){
+      setTimeout(()=>{
+        // 1. Apagado suave a opacidad 0 (comunica que terminó la secuencia)
+        el.classList.add('fade-out');
+        if(cursor)cursor.classList.add('fade-out');
+
+        // 2. Pausa en opacidad 0 y reinicio del show desde frase 1
+        setTimeout(()=>{
+          el.textContent="";
+          el.classList.remove('fade-out');
+          if(cursor)cursor.classList.remove('fade-out');
+          i=0;
+          j=0;
+          del=false;
+          setTimeout(type,400);
+        },2500);
+      },2000);
+      return;
+    }
+    setTimeout(()=>{del=true;type();},1800);
+    return;
+  }
+  if(del&&j<0){
+    del=false;
+    i=(i+1)%phrases.length;
+    setTimeout(type,400);
+    return;
+  }
+  setTimeout(type,del?25:55);
+}
+type();
+})();
+
+// App navigation
+const viewTitles={inicio:'Tu operación',ordenes:'Órdenes de trabajo',equipo:'Equipo',lugares:'Lugares'};
+function appNav(view){
+  document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('active'));
+  const target=document.getElementById('appview-'+view);
+  if(target)target.classList.add('active');
+  document.querySelectorAll('.app-tab').forEach(t=>{t.classList.remove('active');if(t.dataset.view===view)t.classList.add('active');});
+  document.getElementById('app-view-title').textContent=viewTitles[view]||'Tu operación';
+  document.getElementById('app-scroll').scrollTop=0;
+}
+
+// App filter orders
+function appFilterOrders(cat, btn){
+  document.querySelectorAll('.app-filter-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const items=document.querySelectorAll('#appview-ordenes .app-list-item');
+  items.forEach(item=>{
+    if(cat==='todas' || item.dataset.status===cat){
+      item.style.display='flex';
+    } else {
+      item.style.display='none';
+    }
+  });
+}
+
+// Nav mobile close on scroll
+window.addEventListener('scroll',()=>{const m=document.getElementById('nav-mobile');if(m)m.classList.remove('active');});
+</script>
+</body>
+</html>
